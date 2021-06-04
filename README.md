@@ -130,7 +130,7 @@ __Some basic metrics for `session5.py` file__
         """
 
 ### polygon_area
-    def polygon_area(length: int, *args, sides: int = 3, **kwargs) -> Union[list, Exception]:
+    def polygon_area(length: int, *args, sides: int = 3, **kwargs) -> Union[float, Exception]:
     
     """
     Calculates the area of a regular polygon with number of sides between [3, 6] range (inclusive)
@@ -147,7 +147,7 @@ __Some basic metrics for `session5.py` file__
     """
 
 ### temp_converter
-    def temp_converter(temp, *args, temp_given_in: str = 'f', **kwargs) -> Union[list, Exception]:
+    def temp_converter(temp, *args, temp_given_in: str = 'f', **kwargs) -> Union[float, Exception]:
     """
     
     Converts temperature from celsius 'c' to fahrenheit 'f' or fahrenheit to celsius
@@ -172,7 +172,7 @@ __Some basic metrics for `session5.py` file__
 
 ### speed_converter
     def speed_converter(speed: float, *args, dist_type: str = 'km',
-                    time_type: str = 'min', **kwargs) -> Union[list, Exception]:
+                    time_type: str = 'min', **kwargs) -> Union[float, Exception]:
     
     """
     Converts speed from kmph (provided by user as input) to different units,
@@ -192,7 +192,7 @@ __Some basic metrics for `session5.py` file__
     kwargs : to scoop other additional arbitrary keyword-only arguments
 
     -------
-    Returns -> converted value(s) for speed(s) provided
+    Returns -> converted value for speed provided
     -------
     -------
     """
