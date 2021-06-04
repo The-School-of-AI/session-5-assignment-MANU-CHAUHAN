@@ -14,16 +14,6 @@ __Some basic metrics for `session5.py` file__
 
 ====================================
 
-    Last Pylint run result:
-    ----------------------------------------------------------------------
-    ----> Your code has been rated at 8.68/10 (previous run: 8.43/10, +0.25)
-
-
-
-    Last Pylint run result:
-    ----------------------------------------------------------------------
-    Your code has been rated at 9.62/10 (previous run: 9.25/10, +0.38)
-
 
     Cyclomatic Complexity result:
     ----------------------------------------------------------------------

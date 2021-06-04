@@ -35,7 +35,8 @@ def test_session5_readme_500_words():
     readme = open("README.md", "r", encoding="utf-8")
     readme_words = readme.read().split()
     readme.close()
-    assert len(readme_words) >= 500, "Make your README.md file interesting! Add at least 500 words"
+    assert len(
+        readme_words) >= 500, "Make your README.md file interesting! Add at least 500 words"
 
 
 def test_session5_readme_proper_description():
@@ -72,21 +73,24 @@ def test_session5_readme_file_for_more_than_10_hashes():
 
 
 def test_session5_indentations():
-    lines = inspect.getsource(session5)
     """ Checks session5.py file for proper indentation for any token as well as spaces, using re module 
     """
+    lines = inspect.getsource(session5)
     spaces = re.findall('\n +.', lines)
-    for space in spaces:
+    for i, space in enumerate(spaces):
+        print(i)
         assert len(space) % 4 == 2, "Your script contains misplaced indentations"
-        assert len(re.sub(r'[^ ]', '', space)) % 4 == 0, "Your code indentation does not follow PEP8 guidelines"
-
+        assert len(re.sub(
+            r'[^ ]', '', space)) % 4 == 0, "Your code indentation does not follow PEP8 guidelines"
+test_session5_indentations()
 
 def test_session5_function_name_had_cap_letter():
     """ Checks if any function is using capital letter in it's name. This is a BIG NO !
     """
     funcs = inspect.getmembers(session5, inspect.isfunction)
     for f in funcs:
-        assert len(re.findall('[A-Z]', f[0])) == 0, "You have used Capital letter(s) in your function names 😒"
+        assert len(re.findall(
+            '[A-Z]', f[0])) == 0, "You have used Capital letter(s) in your function names 😒"
 
 
 ############################## Assignment Validations###########################
@@ -268,7 +272,8 @@ def test_session5_squared_power_list_output():
         Test squared_power_list function for output with multiple inputs"""
     assert session5.squared_power_list(1, start=1, end=5) == [1, 1, 1,
                                                               1], "squared_power_list is not working as expected"
-    assert session5.squared_power_list(2, start=1, end=4) == [2, 4, 8], "squared_power_list is not working as expected"
+    assert session5.squared_power_list(2, start=1, end=4) == [
+        2, 4, 8], "squared_power_list is not working as expected"
 
 
 ####################### Validations for polygon_area()####################
@@ -396,15 +401,19 @@ def test_session5_temp_converter_unwanted_args():
 def test_session5_temp_converter_output_in_fahrenheit():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for output with multiple inputs in fahrenheit"""
-    assert session5.temp_converter(25, temp_given_in='c') == 77.0, "temp_converter is not working as expected"
-    assert session5.temp_converter(-25, temp_given_in='C') == -13.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(
+        25, temp_given_in='c') == 77.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(-25, temp_given_in='C') == - \
+        13.0, "temp_converter is not working as expected"
 
 
 def test_session5_temp_converter_output_in_celsius():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for output with multiple inputs in celsius"""
-    assert session5.temp_converter(77, temp_given_in='f') == 25.0, "temp_converter is not working as expected"
-    assert session5.temp_converter(-13, temp_given_in='F') == -25, "temp_converter is not working as expected"
+    assert session5.temp_converter(
+        77, temp_given_in='f') == 25.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(-13, temp_given_in='F') == - \
+        25, "temp_converter is not working as expected"
 
 
 ####################### Validations for speed_converter()########################
@@ -484,40 +493,58 @@ def test_session5_speed_converter_unwanted_args():
 def test_session5_speed_converter_output_km_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from km/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000, dist='KM', time='MS') == 0, "speed_converter is not working as expected"
-    assert session5.speed_converter(36000, dist='KM', time='S') == 10, "speed_converter is not working as expected"
-    assert session5.speed_converter(6000, dist='KM', time='MIN') == 100, "speed_converter is not working as expected"
-    assert session5.speed_converter(100, dist='KM', time='HR') == 100, "speed_converter is not working as expected"
-    assert session5.speed_converter(100, dist='KM', time='DAY') == 2400, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='KM', time='MS') == 0, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='KM', time='S') == 10, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        6000, dist='KM', time='MIN') == 100, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        100, dist='KM', time='HR') == 100, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        100, dist='KM', time='DAY') == 2400, "speed_converter is not working as expected"
 
 
 def test_session5_speed_converter_output_m_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from m/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000, dist='M', time='MS') == 10, "speed_converter is not working as expected"
-    assert session5.speed_converter(3600, dist='M', time='S') == 1000, "speed_converter is not working as expected"
-    assert session5.speed_converter(60, dist='M', time='MIN') == 1000, "speed_converter is not working as expected"
-    assert session5.speed_converter(60, dist='M', time='HR') == 60000, "speed_converter is not working as expected"
-    assert session5.speed_converter(24, dist='M', time='DAY') == 576000, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='M', time='MS') == 10, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        3600, dist='M', time='S') == 1000, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        60, dist='M', time='MIN') == 1000, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        60, dist='M', time='HR') == 60000, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        24, dist='M', time='DAY') == 576000, "speed_converter is not working as expected"
 
 
 def test_session5_speed_converter_output_ft_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from ft/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000, dist='FT', time='MS') == 33, "speed_converter is not working as expected"
-    assert session5.speed_converter(36000, dist='FT', time='S') == 32808, "speed_converter is not working as expected"
-    assert session5.speed_converter(6000, dist='FT', time='MIN') == 328084, "speed_converter is not working as expected"
-    assert session5.speed_converter(100, dist='FT', time='HR') == 328084, "speed_converter is not working as expected"
-    assert session5.speed_converter(100, dist='FT', time='DAY') == 7874010, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='FT', time='MS') == 33, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='FT', time='S') == 32808, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        6000, dist='FT', time='MIN') == 328084, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        100, dist='FT', time='HR') == 328084, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        100, dist='FT', time='DAY') == 7874010, "speed_converter is not working as expected"
 
 
 def test_session5_speed_converter_output_yrd_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from yrd/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000, dist='YRD', time='MS') == 11, "speed_converter is not working as expected"
-    assert session5.speed_converter(3600, dist='YRD', time='S') == 1094, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        36000, dist='YRD', time='MS') == 11, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        3600, dist='YRD', time='S') == 1094, "speed_converter is not working as expected"
     assert session5.speed_converter(6000, dist='YRD',
                                     time='MIN') == 109361, "speed_converter is not working as expected"
-    assert session5.speed_converter(100, dist='YRD', time='HR') == 109361, "speed_converter is not working as expected"
+    assert session5.speed_converter(
+        100, dist='YRD', time='HR') == 109361, "speed_converter is not working as expected"
     assert session5.speed_converter(100, dist='YRD',
                                     time='DAY') == 2624662, "speed_converter is not working as expected"
