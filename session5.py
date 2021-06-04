@@ -1,13 +1,15 @@
 """
-Module docstring:
+    Module docstring:
     To have a generalized time_it function (like Python's timeit)
     that would enable to take in any function that has to be timed, with proper arguments obviously.
 
-    To also have other utility functions that would also enable to test the `time_it` function.
+    To also have other utility functions that would enable to test the `time_it` function.
+
+    Tests in `test_session5.py` file
 
     Last Pylint run result:
     ----------------------------------------------------------------------
-        Your code has been rated at 8.68/10 (previous run: 8.43/10, +0.25)
+    Your code has been rated at 9.62/10 (previous run: 9.25/10, +0.38)
 
 
     Cyclomatic Complexity result:
@@ -22,20 +24,21 @@ Module docstring:
     31 - 40	    E	    high - complex block, alarming
     41+ 	    F	    very high - error-prone, unstable block
 
-    ---->
-    F 64:0 squared_power_list - B (7)
-    F 123:0 temp_converter - B (7)
-    F 20:0 time_it - B (6)
-    F 158:0 speed_converter - B (6)
-    F 98:0 polygon_area - A (5)
+    results ---->
+    F 185:0 temp_converter - C (12)
+    F 233:0 speed_converter - B (10)
+    F 113:0 squared_power_list - B (9)
+    F 153:0 polygon_area - B (8)
+    F 66:0 time_it - B (6)
 
     5 blocks (classes, functions, methods) analyzed.
-    Average complexity: B (6.2)
+    Average complexity: B (9.0)
+
 
 
     Raw metrics:
     ----------------------------------------------------------------------
-    (reference):
+    (for reference):
     LOC: the total number of lines of code
     LLOC: the number of logical lines of code
     SLOC: the number of source lines of code - not necessarily corresponding to the LLOC
@@ -43,23 +46,22 @@ Module docstring:
     multi: the number of lines representing multi-line strings
     blank: the number of blank lines (or whitespace-only ones)
 
-    ---->
-    LOC: 256
-    LLOC: 61
-    SLOC: 67
-    Comments: 3
-    Single comments: 2
-    Multi: 122
-    Blank: 65
+    RAW metric values ---->
+    LOC: 285
+    LLOC: 88
+    SLOC: 95
+    Comments: 5
+    Single comments: 5
+    Multi: 123
+    Blank: 62
 
 
-======================================================================
+    ======================================================================
 """
 
 import math
 import time
 import types
-import traceback
 from typing import Union
 
 
@@ -89,22 +91,19 @@ def time_it(fn: types.FunctionType, *args, repetitions: int = 1,
     -------
     -------
     """
-    if not (isinstance(fn, types.FunctionType) and hasattr(fn, ' __call__')):
+    if not (isinstance(fn, (types.FunctionType, types.BuiltinFunctionType))
+            and hasattr(fn, '__call__')):
         return TypeError("😠 Hey dude! You are supposed to pass a function to time for `fn`!")
-    if repetitions <= 0:
+    if repetitions < 0:
         return TypeError("Seriously man!"
-                         " 🙄  Do I need to tell you that `repetitions` would have to be > 0 !")
-    try:
+                         " 🙄  Do I need to tell you that `repetitions` would have to be positive !")
 
-        start = time.perf_counter()
-        for _ in range(repetitions):
-            fn(*args, **kwargs)
-        end = time.perf_counter()
-        return round((end - start) / repetitions, 5)
-
-    except Exception:
-        # print traceback in case of any Exception raised by :param fn
-        print(traceback.print_exc())
+    start = time.perf_counter()
+    for _ in range(repetitions):
+        result = fn(*args, **kwargs)
+        print(f"Result for {fn}, count: {_} is: {result}")
+    end = time.perf_counter()
+    return (end - start) / repetitions if repetitions else 0
 
 
 def squared_power_list(number: int, *args, start: int = 0, end: int = 5, **kwargs) \
@@ -116,32 +115,38 @@ def squared_power_list(number: int, *args, start: int = 0, end: int = 5, **kwarg
     ----------
     number : type: int, the number/base which is raised to powers and added in list,
             if only one number is provided use it for every list element,
-            otherwise if *args hold the numbers use those
-
-    args : to scoop other additional arbitrary positional arguments
+            otherwise if *args hold the numbers use those and return list of lists,
+            where each inner list corresponds to each positional argument including number,
+            must be less than 10
 
     start : the start value, number ^ start
 
     end : the end range value, number ^ end
-
-    kwargs : to scoop other additional arbitrary keyword-only arguments
 
     -------
     Returns -> a list with elements [number ^ start, number ^ (start+1), ..., number ^ end]
     -------
     -------
     """
+    if not isinstance(number, int):
+        raise TypeError("Hey, Only integer type arguments are allowed ")
+
     if start < 0 or end < 0 or (end < start):
-        raise ValueError("What!!! 😑 'start' and 'end' values cannot be -ve."
-                         " And 'end' must be > 'start'")
+        raise ValueError("What!!! 😑 Value of start or end can't be negative and"
+                         " Value of start should be less than end")
+    if number > 10:
+        raise ValueError("Value of number should be less than 10")
 
-    nums = [number] + list(args)
+    if args:
+        raise TypeError("Squared_powered_list takes maximum 1 positional arguments ,"
+                        " please do not send extra 🙏🏻")
+    if kwargs:
+        raise TypeError("squared_power_list takes maximum 2 keyword/named arguments  👊")
 
-    results = [[number ** x for x in range(start, end + 1)] for number in nums]
-    return results[0] if len(results) == 1 else results
+    return [number ** x for x in range(start, end)]
 
 
-def polygon_area(length: int, *args, sides: int = 3, **kwargs) -> Union[list, Exception]:
+def polygon_area(length: int, *args, sides: int, **kwargs) -> Union[float, Exception]:
     """
     Calculates the area of a regular polygon with number of sides between [3, 6] range (inclusive)
 
@@ -155,18 +160,25 @@ def polygon_area(length: int, *args, sides: int = 3, **kwargs) -> Union[list, Ex
     -------
     -------
     """
-    if not (length > 0 or (3 <= sides <= 6)):
-        raise ValueError("😤 Again !! 'length' should be positive and"
-                         " sides should be within closed range [3,6]")
 
-    lengths = [length] + list(args)  # to use dynamic number of positional length values
+    if not (isinstance(length, int) and isinstance(sides, int)):
+        raise TypeError("Only integer type arguments are allowed")
+    if length < 1:
+        raise ValueError("😤 Again !! 'length' should be positive")
+    if sides < 3 or sides > 6:
+        raise ValueError("Kindly check value of sides given, must be in range 3,6"
+                         " inclusive make sure you provide correct values")
+    if args:
+        raise TypeError("polygon_area function takes maximum 1 positional"
+                        " arguments, more provided 😒")
+    if kwargs:
+        raise TypeError("polygon_area function take maximum 1 keyword/named"
+                        " arguments, more provided 🙄")
 
-    # return list containing one or n number of polygon_areas corresponding to each length
-    result = [(sides * length ** 2) / (4 * math.tan(math.pi / sides)) for length in lengths]
-    return result[0] if len(result) == 1 else result
+    return (sides * length ** 2) / (4 * math.tan(math.pi / sides))
 
 
-def temp_converter(temp, *args, temp_given_in: str = 'f', **kwargs) -> Union[list, Exception]:
+def temp_converter(temp, *args, temp_given_in: str = 'f', **kwargs) -> Union[float, Exception]:
     """
     Converts temperature from celsius 'c' to fahrenheit 'f' or fahrenheit to celsius
 
@@ -187,33 +199,46 @@ def temp_converter(temp, *args, temp_given_in: str = 'f', **kwargs) -> Union[lis
     -------
     """
 
-    if temp_given_in.lower() not in ['c', 'f']:
-        raise TypeError("😒, No other worldly temperature conversion scales,"
-                        " not yet (yeah... not even Kelvin)")
+    if not isinstance(temp, (int, float)):
+        raise TypeError("Only float/int type arguments are allowed")
 
-    temps = [temp] + list(args)
+    if not isinstance(temp_given_in, str):
+        raise TypeError("Character string expected")
+
+    if temp_given_in.lower() not in ['c', 'f']:
+        raise ValueError("Only f or c is allowed")
+
+    if args:
+        raise TypeError("temp_converter function takes maximum 1"
+                        " positional arguments, more provided 😒")
+    if kwargs:
+        raise TypeError("temp_converter function take maximum 1"
+                        " keyword/named arguments, more provided 🙄")
+
+    if temp_given_in.lower() == 'c' and temp < -273.15:
+        raise ValueError("Temperature can't go below -273.15 celsius = 0 Kelvin")
+    if temp_given_in.lower() == 'f' and temp < -459.67:
+        raise ValueError("Temperature can't go below -459.67 fahrenheit = 0 Kelvin")
 
     if temp_given_in.lower() == 'c':
-        result = [temp * (9 / 5) + 32 for temp in temps]
+        return round(temp * (9 / 5) + 32, 4)
     if temp_given_in.lower() == 'f':
-        result = [(temp - 32) * 5 / 9 for temp in temps]
-
-    return result[0] if len(result) == 1 else result
+        return round((temp - 32) * 5 / 9, 4)
 
 
-def speed_converter(speed: float, *args, dist_type: str = 'km',
-                    time_type: str = 'min', **kwargs) -> Union[list, Exception]:
+def speed_converter(speed, *args, dist: str = 'km',
+                    time: str = 'min', **kwargs) -> Union[float, Exception]:
     """
     Converts speed from kmph (provided by user as input) to different units,
     dist can be km/m/ft/yrd time can be ms/s/min/hr/day
 
     Parameters
     ----------
-    speed : type: float: the speed value to use for conversion
+    speed : type: float/int: the speed value to use for conversion
 
-    dist_type : type: str: the distance metric type to use for conversion
+    dist : type: str: the distance metric type to use for conversion
 
-    time_type : type: str: the time metric to use for conversion
+    time : type: str: the time metric to use for conversion
 
     args : to scoop other additional arbitrary positional arguments,
             use these if these for same logic as speed if given
@@ -225,31 +250,31 @@ def speed_converter(speed: float, *args, dist_type: str = 'km',
     -------
     -------
     """
+    if not isinstance(speed, (int, float)):
+        raise TypeError("😑 Speed can be int or float type only")
+    if not isinstance(dist, str):
+        raise TypeError(" Character string expected for distance unit")
+    if not isinstance(time, str):
+        raise TypeError("Character string expected for time unit")
 
-    if speed < 0:
-        raise ValueError("🤦🏻‍♂️ What is wrong with you today? Why are you obsessed with -ve values?"
-                         " Are you a hard core pessimist? Is it your nihilistic view towards life?"
-                         "Or is it existentialism? I recommend stoic texts,"
-                         " perhaps that would help.")
+    if args:
+        raise TypeError("speed_converter function takes maximum 1 positional"
+                        " arguments, more provided 😒")
+    if kwargs:
+        raise TypeError("speed_converter function take maximum 2 keyword/named arguments,"
+                        " more provided or wrong spelling used  🙄")
 
-    if dist_type not in {'km', 'm', 'ft', 'yrd'}:
-        raise TypeError(
-            "Woah.. wait.. are you from an alternative parallel universe"
-            " where you have other system and scales? "
-            " given 'dist' type is not among the implemented types ('km', 'm', 'ft', 'yrd') 🤷🏻‍♂️")
+    if speed < 0 or speed >= 300001:
+        raise ValueError("️ Speed can't be negative and Speed can't be"
+                         " greater than speed of light!")
 
-    if time_type not in {'ms', 's', 'm', 'hr', 'day'}:
-        raise TypeError(
-            " 😐 given 'time' type is not among the implemented types ('ms', 's', 'm', 'hr', 'day')")
+    dist, time = dist.lower(), time.lower()
+    if dist not in {'km', 'm', 'ft', 'yrd'}:
+        raise ValueError(" Incorrect unit of distance. Only km/m/ft/yrd allowed 🤷🏻‍️")
+    if time not in {'ms', 's', 'min', 'hr', 'day'}:
+        raise ValueError("😐 Incorrect unit of Time. Only ms/s/min/hr/day allowed")
 
-    def km_to(convert_to: str):
-        return {'m': 1000, 'ft': 3280.84, 'yrd': 1093.61}.get(convert_to, 1)
-
-    def hr_to(convert_to: str):
-        return {'ms': 3.6e6, 's': 3600, 'm': 60, 'day': 1 / 24}.get(convert_to, 1)
-
-    speeds = [speed] + list(args)
-
-    results = [speed * km_to(dist_type) / hr_to(time_type) for speed in speeds]
-
-    return results[0] if len(results) == 1 else results
+    km_to = {'m': 1000, 'ft': 3280.8375, 'yrd': 1093.609}
+    hr_to = {'ms': 3600000, 's': 3600, 'min': 60, 'day': 1 / 24}
+    value = speed * km_to.get(dist, 1) / hr_to.get(time, 1)
+    return float(round(value))

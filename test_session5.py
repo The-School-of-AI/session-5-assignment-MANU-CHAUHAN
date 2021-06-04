@@ -17,107 +17,169 @@ README_CONTENT_CHECK_FOR = [
     'squared_power_list',
     'polygon_area',
     'temp_converter',
-    'speed_converter'
-]
+    'speed_converter',
+    '*args', '**kwargs',
+    'repetitions', 'temp_given_in', 'side', 'length', 'area']
+
 
 def test_session5_readme_exists():
-    """ A. failure_message: Found README.md file
-        B. Once you write this test, it needs to print the filures_message for failing this test.
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    Checks if README.md exists
+    """
+    assert os.path.isfile("README.md"), "Not Found README.md file"
+
 
 def test_session5_readme_500_words():
-    """ A. failures_message: Make your README.md file interesting! Add atleast 500 words
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    """ Checks if README.md file has at least 500 characters, raises assert error otherwise
     """
-    assert True == False, "You need to write this test!"
+    readme = open("README.md", "r", encoding="utf-8")
+    readme_words = readme.read().split()
+    readme.close()
+    assert len(readme_words) >= 500, "Make your README.md file interesting! Add at least 500 words"
 
 
 def test_session5_readme_proper_description():
-    """ A. failures_message: You have not described all the functions/classes well in your README.md file
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    """ Checks README.md file for description of all important function names and arguments.
+
+    Includes: 'time_it(fn, *args, repetitions= 1, **kwargs)',
+    'squared_power_list',
+    'polygon_area',
+    'temp_converter',
+    'speed_converter',
+    '*args', '**kwargs',
+    'repetitions', 'temp_given_in', 'side', 'length', 'area'
     """
-    assert True == False, "You need to write this test!"
+
+    READMELOOKSGOOD = True
+    f = open("README.md", "r", encoding="utf-8")
+    content = f.read()
+    f.close()
+    for c in README_CONTENT_CHECK_FOR:
+        if c not in content:
+            READMELOOKSGOOD = False
+            pass
+    assert READMELOOKSGOOD is True, "You have not described all the functions/class well in your README.md file"
 
 
 def test_session5_readme_file_for_more_than_10_hashes():
-    """ A. failures_message: You have not described all the functions/classes well in your README.md file
-        B. Once you write this test, that checks formatting by checking # being used more than 10 times, \
-        it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    """ Checks if README has decent formatting and uses at least 10 hashes (10 #s and not 🚬 )
     """
-    assert True == False, "You need to write this test!"
+
+    f = open("README.md", "r", encoding="utf-8")
+    content = f.read()
+    f.close()
+    assert content.count("#") >= 10
 
 
 def test_session5_indentations():
-    """ Returns pass if used four spaces for each level of syntactically \
-        significant indenting (spaces%4 == 2 and spaces%4 ==0).
-        A.  failures_message_1: Your script contains misplaced indentations
-            failures_message_2: Your code indentation does not follow PEP8 guidelines
-        B. Once you write this test, it needs to print the failures_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    lines = inspect.getsource(session5)
+    """ Checks session5.py file for proper indentation for any token as well as spaces, using re module 
     """
-    assert True == False, "You need to write this test!"
+    spaces = re.findall('\n +.', lines)
+    for space in spaces:
+        assert len(space) % 4 == 2, "Your script contains misplaced indentations"
+        assert len(re.sub(r'[^ ]', '', space)) % 4 == 0, "Your code indentation does not follow PEP8 guidelines"
 
 
 def test_session5_function_name_had_cap_letter():
-    """ A. failures_message: You have used Capital letter(s) in your function names
-        B. Once you write this test, that checks formatting by checking # being used more than 10 times, \
-        it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    """ Checks if any function is using capital letter in it's name. This is a BIG NO !
     """
-    assert True == False, "You need to write this test!"
+    funcs = inspect.getmembers(session5, inspect.isfunction)
+    for f in funcs:
+        assert len(re.findall('[A-Z]', f[0])) == 0, "You have used Capital letter(s) in your function names 😒"
 
 
 ############################## Assignment Validations###########################
 
 def test_session5_time_it_print():
-    """ Test time_it with print function, repetitions=5
-        A. failures_message: time_it can't time print function
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
+    """ Uses time_it function to test in-built `print` function,
+        with repetitions and arguments (both positional as well as keyword) to be passed to print,
+        the return type must be float (average time for run)
     """
-    assert True == False, "You need to write this test!"
+    assert isinstance(session5.time_it(print, 1, 2, 3, 4, repetitions=5, end="***"),
+                      float), "time_it can't time print function"
 
 
 def test_session5_time_it_squared_power_list():
-    """Test time_it with squared_power function, repetitions=5
-        A. failures_message: time_it can't time squared_power_list function
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    Uses time_it function to test `squared_power_list` function,
+    with repetitions and arguments (both positional as well as keyword) to be passed,
+    the return type must be float (average time for run)
+    """
+    assert isinstance(session5.time_it(session5.squared_power_list, number=2, repetitions=5, start=1, end=4),
+                      float), "time_it can't time squared_power_list function"
+
+
+# def test_session5_time_it_squared_power_list_multi():
+#     """
+#     Uses time_it function to test `squared_power_list` function, with multiple positional arguments for
+#     squared_power_list, with repetitions and arguments (both positional as well as keyword) to be passed,
+#     the return type must be float (average time for run)
+#     """
+#     assert isinstance(session5.time_it(session5.squared_power_list, 1, 2, 3, 4, repetitions=5, start=1, end=10),
+#                       float), "time_it can't time squared_power_list function"
 
 
 def test_session5_time_it_polygon_area():
-    """Test time_it with polygon_area function, repetitions=10
-        A. failures_message: time_it can't time polygon_area function
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    Uses time_it function to test `polygon_area` function,
+    with repetitions and arguments (both positional [length] as well as keyword [side]) to be passed,
+    the return type must be float (average time for run)
+    """
+    assert isinstance(session5.time_it(session5.polygon_area, 4, repetitions=5, sides=6),
+                      float), "time_it can't time polygon_area function"
 
 
-def test_session5_time_it_temp_converter():
-    """Test time_it with temp_converter function, repetitions=100
-        A. failures_message: time_it can't time temp_converter function
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
-    """
-    assert True == False, "You need to write this test!"
+# def test_session5_time_it_polygon_area_multi():
+#     """
+#     Uses time_it function to test `polygon_area` function, with multiple positional arguments
+#     with repetitions and arguments (both positional as well as keyword) to be passed,
+#     the return type must be float (average time for run)
+#     """
+#     assert isinstance(session5.time_it(session5.polygon_area, 4, 2, 1, 10, repetitions=5, side=5),
+#                       float), "time_it can't time polygon_area function"
 
 
 def test_session5_time_it_speed_converter():
-    """Test time_it with speed_converter function, repetitions=200
-        A. failures_message: time_it can't time speed_converter function
-        B. Once you write this test, it needs to print the failure_message
-        C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+        Uses time_it function to test `speed_converter` function,
+        with repetitions and arguments (both positional [speed] as well as keyword [dist_type, time_type]) to be passed,
+        the return type must be float (average time for run)
+        """
+    assert isinstance(session5.time_it(session5.speed_converter, 100, repetitions=5, dist='m', time='min'),
+                      float), "time_it can't time speed_converter function"
 
+
+# def test_session5_time_it_speed_converter_multi():
+#     """
+#         Uses time_it function to test `speed_converter` function, with multiple positional arguments
+#         with repetitions and arguments (both positional [speed] as well as keyword [dist_type, time_type]) to be passed,
+#         the return type must be float (average time for run)
+#         """
+#     assert isinstance(session5.time_it(session5.speed_converter, 110.14, 115, 135, 147, 160,
+#                                        repetitions=5, dist_type='m', time_type='min'),
+#                       float), "time_it can't time speed_converter function"
+
+
+def test_session5_time_it_temp_converter():
+    """
+    Uses time_it function to test `temp_converter` function,
+    with repetitions and arguments (both positional [temp] as well as keyword [temp_given_in]) to be passed,
+    the return type must be float (average time for run)
+    """
+    assert isinstance(session5.time_it(session5.temp_converter, 37.5, repetitions=5, temp_given_in='c'),
+                      float), "time_it can't time temp_converter function"
+
+
+# def test_session5_time_it_temp_converter_multi():
+#     """
+#     Uses time_it function to test `temp_converter` function, with multiple positional arguments
+#     with repetitions and arguments (both positional [temp] as well as keyword [temp_given_in]) to be passed,
+#     the return type must be float (average time for run)
+#     """
+#     assert isinstance(
+#         session5.time_it(session5.temp_converter, 97.2, 98.5, 100.4, repetitions=5, temp_given_in='f'),
+#         float), "time_it can't time temp_converter function"
 
 
 ####################### Validations for time_it#################################
@@ -133,17 +195,22 @@ def test_session5_time_it_incorrect_pos_args():
     """ DON'T TOUCH THIS FUNCTION \
         Test time_it with non existing positional arguments"""
     with pytest.raises(NameError, match=r".*is not defined*"):
-        session5.time_it(unknown_fn,repetitions=1)
+        session5.time_it(unknown_fn, repetitions=1)
 
 
 def test_session5_time_it_zero_rep():
     """ DON'T TOUCH THIS FUNCTION \
         Test time_it with zero repetation. Should return 0 avg time"""
-    assert session5.time_it(print, 1, 2, 3, sep='-', end=' ***\n', repetitions=0) == 0, "time_it should retun 0 for no function call"
-    assert session5.time_it(squared_power_list, 2, start=0, end=5, repetitions=0) == 0, "time_it should retun 0 for no function call"
-    assert session5.time_it(polygon_area, 15, sides=3, repetitions=0) == 0, "time_it should retun 0 for no function call"
-    assert session5.time_it(speed_converter, 100, dist='km', time='min', repetitions=0) == 0, "time_it should retun 0 for no function call"
-    assert session5.time_it(temp_converter, 100, temp_given_in = 'f', repetitions=0) == 0, "time_it should retun 0 for no function call"
+    assert session5.time_it(print, 1, 2, 3, sep='-', end=' ***\n',
+                            repetitions=0) == 0, "time_it should retun 0 for no function call"
+    assert session5.time_it(squared_power_list, 2, start=0, end=5,
+                            repetitions=0) == 0, "time_it should retun 0 for no function call"
+    assert session5.time_it(polygon_area, 15, sides=3,
+                            repetitions=0) == 0, "time_it should retun 0 for no function call"
+    assert session5.time_it(speed_converter, 100, dist='km', time='min',
+                            repetitions=0) == 0, "time_it should retun 0 for no function call"
+    assert session5.time_it(temp_converter, 100, temp_given_in='f',
+                            repetitions=0) == 0, "time_it should retun 0 for no function call"
 
 
 ####################### Validations for squared_power_list()####################
@@ -154,27 +221,31 @@ def test_session5_squared_power_list_no_args():
     with pytest.raises(TypeError, match=r".*required positional argument: 'number'*"):
         session5.squared_power_list()
 
+
 def test_session5_squared_power_list_incorrect_pos_args():
     """DON'T TOUCH THIS FUNCTION \
         Test squared_power_list function for incorrect values for positional arguments"""
     with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
         session5.squared_power_list('sac')
     with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
-        session5.squared_power_list(1+2j)
+        session5.squared_power_list(1 + 2j)
+
 
 def test_session5_squared_power_list_incorrect_start__end():
     """DON'T TOUCH THIS FUNCTION \
         Test squared_power_list function for incorrect value to start keyword arguments"""
     with pytest.raises(ValueError, match=r".*Value of start or end can't be negative*"):
-        session5.squared_power_list(2,start=-1)
+        session5.squared_power_list(2, start=-1)
     with pytest.raises(ValueError, match=r".*Value of start or end can't be negative*"):
-        session5.squared_power_list(2,end=-1)
+        session5.squared_power_list(2, end=-1)
+
 
 def test_session5_squared_power_list_start_gt_end():
     """DON'T TOUCH THIS FUNCTION \
         Test squared_power_list function for start value greater than end"""
     with pytest.raises(ValueError, match=r".*Value of start should be less than end*"):
-        session5.squared_power_list(2,start=9,end=1)
+        session5.squared_power_list(2, start=9, end=1)
+
 
 def test_session5_squared_power_list_number_gt_10():
     """DON'T TOUCH THIS FUNCTION \
@@ -182,50 +253,76 @@ def test_session5_squared_power_list_number_gt_10():
     with pytest.raises(ValueError, match=r".*Value of number should be less than 10*"):
         session5.squared_power_list(15)
 
+
 def test_session5_squared_power_list_unwanted_args():
     """DON'T TOUCH THIS FUNCTION \
         Test squared_power_list function for unwanted positional/keyword arguments"""
     with pytest.raises(TypeError, match=r".*takes maximum 1 positional arguments*"):
-        session5.squared_power_list(1,2,start=1, end=5)
+        session5.squared_power_list(1, 2, start=1, end=5)
     with pytest.raises(TypeError, match=r".*maximum 2 keyword/named arguments*"):
-        session5.squared_power_list(1,start=1, end=5, test = 0)
+        session5.squared_power_list(1, start=1, end=5, test=0)
+
 
 def test_session5_squared_power_list_output():
     """DON'T TOUCH THIS FUNCTION \
         Test squared_power_list function for output with multiple inputs"""
-    assert session5.squared_power_list(1,start=1, end=5) == [1,1,1,1], "squared_power_list is not working as expected"
-    assert session5.squared_power_list(2,start=1, end=4) == [2,4,8], "squared_power_list is not working as expected"
-
+    assert session5.squared_power_list(1, start=1, end=5) == [1, 1, 1,
+                                                              1], "squared_power_list is not working as expected"
+    assert session5.squared_power_list(2, start=1, end=4) == [2, 4, 8], "squared_power_list is not working as expected"
 
 
 ####################### Validations for polygon_area()####################
 def test_session5_polygon_area():
     """Test polygon_area function for no mandatory positional arguments"""
-    assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError, match=r".*required positional argument: 'length'*"):
+        session5.polygon_area()
+
 
 def test_session5_polygon_area_length():
-    """Test polygon_area function for incorrect values for positional argument length (check for string AND imaginary input)"""
-    assert True == False, "You need to write this test!"
+    """Test polygon_area function for incorrect values for positional argument length (check for string AND imaginary
+    input)"""
+    with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
+        session5.polygon_area('hulala', sides=4)
+    with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
+        session5.polygon_area(1 + 2j, sides=4)
+
 
 def test_session5_polygon_area_sides():
     """Test polygon_area function for incorrect value to sides keyword argument (string "ten" AND img input)"""
-    assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
+        session5.polygon_area(2, sides="ten")
+    with pytest.raises(TypeError, match=r".*Only integer type arguments are allowed*"):
+        session5.polygon_area(2, sides=1 + 10j)
+
 
 def test_session5_polygon_area_sides_values():
     """Test polygon_area function for permissible values for sides, check for 0, 1, 2, 7"""
-    assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*check value of sides given, must be in range 3,6 inclusive*"):
+        session5.polygon_area(4, sides=0)
+    with pytest.raises(ValueError, match=r".*check value of sides given, must be in range 3,6 inclusive*"):
+        session5.polygon_area(length=2, sides=1)
+    with pytest.raises(ValueError, match=r".*check value of sides given, must be in range 3,6 inclusive*"):
+        session5.polygon_area(4, sides=2)
+    with pytest.raises(ValueError, match=r".*check value of sides given, must be in range 3,6 inclusive*"):
+        session5.polygon_area(4, sides=7)
+
 
 def test_session5_polygon_area_length_values():
     """Test polygon_area function for permissible values for sides (len > 0)"""
-    assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*'length' should be positive*"):
+        session5.polygon_area(-1, sides=4)
+
 
 def test_session5_polygon_area_unwanted_args():
     """DON'T TOUCH THIS FUNCTION \
         Test polygon_area function for unwanted positional/keyword arguments"""
-    with pytest.raises(TypeError, match=r".*polygon_area function takes maximum 1 positional arguments, more provided*"):
+    with pytest.raises(TypeError,
+                       match=r".*polygon_area function takes maximum 1 positional arguments, more provided*"):
         session5.polygon_area(1, 2, sides=4)
-    with pytest.raises(TypeError, match=r".*polygon_area function take maximum 1 keyword/named arguments, more provided*"):
-        session5.polygon_area(1, sides=4, test = 0)
+    with pytest.raises(TypeError,
+                       match=r".*polygon_area function take maximum 1 keyword/named arguments, more provided*"):
+        session5.polygon_area(1, sides=4, test=0)
+
 
 def test_session5_polygon_area_output():
     length = 10
@@ -245,57 +342,69 @@ def test_session5_polygon_area_output():
     ), "test_session5_polygon_area fails for 6 sides"
 
 
-
 ####################### Validations for temp_converter()########################
 
 def test_session5_temp_converter():
     """Test temp_converter function for no mandatory positional arguments"""
-    assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError, match=r".*required positional argument: 'temp'*"):
+        session5.temp_converter()
+
 
 def test_session5_temp_converter_temp():
-    """Test temp_converter function for incorrect values for positional argument temp (check for string AND imaginary input) """
-    assert True == False, "You need to write this test!"
+    """Test temp_converter function for incorrect values for positional argument temp (check for string AND imaginary
+    input) """
+    with pytest.raises(TypeError, match=r".*Only float/int type arguments are allowed*"):
+        session5.temp_converter('hulala')
+    with pytest.raises(TypeError, match=r".*Only float/int type arguments are allowed*"):
+        session5.temp_converter(1 + 2j)
 
 
 def test_session5_temp_converter_temp_given_in():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for incorrect value to temp_given_in keyword argument"""
     with pytest.raises(ValueError, match=r".*Only f or c is allowed*"):
-        session5.temp_converter(10,temp_given_in='K')
-    with pytest.raises(TypeError, match=r".*Charcater string expected*"):
-        session5.temp_converter(10,temp_given_in=1+2j)
+        session5.temp_converter(10, temp_given_in='K')
+    with pytest.raises(TypeError, match=r".*Character string expected*"):
+        session5.temp_converter(10, temp_given_in=1 + 2j)
+
 
 def test_session5_temp_converter_temp_values_in_celsius():
     """ DON'T TOUCH THIS FUNCTION \
-        Test temp_converter function for permissible values for temprature in celsius"""
-    with pytest.raises(ValueError, match=r".*Temprature can't go below -273.15 celsius = 0 Kelvin*"):
-        session5.temp_converter(-280,temp_given_in='C')
+        Test temp_converter function for permissible values for temperature in celsius"""
+    with pytest.raises(ValueError, match=r".*Temperature can't go below -273.15 celsius = 0 Kelvin*"):
+        session5.temp_converter(-280, temp_given_in='C')
+
 
 def test_session5_temp_converter_temp_values_in_fahrenheit():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for permissible values for temprature in fahrenheit"""
-    with pytest.raises(ValueError, match=r".*Temprature can't go below -459.67 fahrenheit = 0 Kelvin*"):
-        session5.temp_converter(-500,temp_given_in='F')
+    with pytest.raises(ValueError, match=r".*Temperature can't go below -459.67 fahrenheit = 0 Kelvin*"):
+        session5.temp_converter(-500, temp_given_in='F')
+
 
 def test_session5_temp_converter_unwanted_args():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for unwanted positional/keyword arguments"""
-    with pytest.raises(TypeError, match=r".*temp_converter function takes maximum 1 positional arguments, more provided*"):
-        session5.temp_converter(100,2,temp_given_in='F')
-    with pytest.raises(TypeError, match=r".*temp_converter function take maximum 1 keyword/named arguments, more provided*"):
-        session5.temp_converter(100,temp_given_in='C', test = 0)
+    with pytest.raises(TypeError,
+                       match=r".*temp_converter function takes maximum 1 positional arguments, more provided*"):
+        session5.temp_converter(100, 2, temp_given_in='F')
+    with pytest.raises(TypeError,
+                       match=r".*temp_converter function take maximum 1 keyword/named arguments, more provided*"):
+        session5.temp_converter(100, temp_given_in='C', test=0)
+
 
 def test_session5_temp_converter_output_in_fahrenheit():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for output with multiple inputs in fahrenheit"""
-    assert session5.temp_converter(25,temp_given_in='c') == 77.0, "temp_converter is not working as expected"
-    assert session5.temp_converter(-25,temp_given_in='C') == -13.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(25, temp_given_in='c') == 77.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(-25, temp_given_in='C') == -13.0, "temp_converter is not working as expected"
+
 
 def test_session5_temp_converter_output_in_celsius():
     """ DON'T TOUCH THIS FUNCTION \
         Test temp_converter function for output with multiple inputs in celsius"""
-    assert session5.temp_converter(77,temp_given_in='f') == 25.0, "temp_converter is not working as expected"
-    assert session5.temp_converter(-13,temp_given_in='F') == -25, "temp_converter is not working as expected"
+    assert session5.temp_converter(77, temp_given_in='f') == 25.0, "temp_converter is not working as expected"
+    assert session5.temp_converter(-13, temp_given_in='F') == -25, "temp_converter is not working as expected"
 
 
 ####################### Validations for speed_converter()########################
@@ -306,29 +415,33 @@ def test_session5_speed_converter():
     with pytest.raises(TypeError, match=r".*required positional argument: 'speed''*"):
         session5.speed_converter()
 
+
 def test_session5_speed_converter_speed():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for incorrect values for positional argument temp"""
     with pytest.raises(TypeError, match=r".*Speed can be int or float type only*"):
         session5.speed_converter('sac')
     with pytest.raises(TypeError, match=r".*Speed can be int or float type only*"):
-        session5.speed_converter(1+2j)
+        session5.speed_converter(1 + 2j)
+
 
 def test_session5_speed_converter_dist():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for incorrect type of value for dist keyword argument"""
-    with pytest.raises(TypeError, match=r".*Charcater string expected for distance unit*"):
-        session5.speed_converter(10,dist=10)
-    with pytest.raises(TypeError, match=r".*Charcater string expected for distance unit*"):
-        session5.speed_converter(10,dist=1+2j)
+    with pytest.raises(TypeError, match=r".*Character string expected for distance unit*"):
+        session5.speed_converter(10, dist=10)
+    with pytest.raises(TypeError, match=r".*Character string expected for distance unit*"):
+        session5.speed_converter(10, dist=1 + 2j)
+
 
 def test_session5_speed_converter_time():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for incorrect type of value for time keyword argument"""
-    with pytest.raises(TypeError, match=r".*Charcater string expected*"):
-        session5.speed_converter(10,time=10)
-    with pytest.raises(TypeError, match=r".*Charcater string expected*"):
-        session5.speed_converter(10,time=1+2j)
+    with pytest.raises(TypeError, match=r".*Character string expected*"):
+        session5.speed_converter(10, time=10)
+    with pytest.raises(TypeError, match=r".*Character string expected*"):
+        session5.speed_converter(10, time=1 + 2j)
+
 
 def test_session5_speed_converter_speed_allowed_values():
     """ DON'T TOUCH THIS FUNCTION \
@@ -338,62 +451,73 @@ def test_session5_speed_converter_speed_allowed_values():
     with pytest.raises(ValueError, match=r".*Speed can't be greater than speed of light*"):
         session5.speed_converter(300001)
 
+
 def test_session5_speed_converter_time_allowed_values():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for permissible value for time keyword argument"""
     with pytest.raises(ValueError, match=r".*Incorrect unit of Time. Only ms/s/min/hr/day allowed*"):
-        session5.speed_converter(10,time='KM')
+        session5.speed_converter(10, time='KM')
     with pytest.raises(ValueError, match=r".*Incorrect unit of Time. Only ms/s/min/hr/day allowed*"):
-        session5.speed_converter(10,time='YRD')
+        session5.speed_converter(10, time='YRD')
+
 
 def test_session5_speed_converter_dist_allowed_values():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for permissible value for dist keyword argument"""
     with pytest.raises(ValueError, match=r".*Incorrect unit of distance. Only km/m/ft/yrd allowed*"):
-        session5.speed_converter(10,dist='MIN')
+        session5.speed_converter(10, dist='MIN')
     with pytest.raises(ValueError, match=r".*Incorrect unit of distance. Only km/m/ft/yrd allowed*"):
-        session5.speed_converter(10,dist='HR')
+        session5.speed_converter(10, dist='HR')
+
 
 def test_session5_speed_converter_unwanted_args():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for unwanted positional/keyword arguments"""
-    with pytest.raises(TypeError, match=r".*speed_converter function takes maximum 1 positional arguments, more provided*"):
-        session5.speed_converter(100,2)
-    with pytest.raises(TypeError, match=r".*speed_converter function take maximum 2 keyword/named arguments, more provided*"):
-        session5.speed_converter(100,dist='M', time = 'HR', test = 'abc')
+    with pytest.raises(TypeError,
+                       match=r".*speed_converter function takes maximum 1 positional arguments, more provided*"):
+        session5.speed_converter(100, 2)
+    with pytest.raises(TypeError,
+                       match=r".*speed_converter function take maximum 2 keyword/named arguments, more provided*"):
+        session5.speed_converter(100, dist='M', time='HR', test='abc')
+
 
 def test_session5_speed_converter_output_km_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from km/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000,dist='KM',time='MS') == 0, "speed_converter is not working as expected"
-    assert session5.speed_converter(36000,dist='KM',time='S') == 10, "speed_converter is not working as expected"
-    assert session5.speed_converter(6000,dist='KM',time='MIN') == 100, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='KM',time='HR') == 100, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='KM',time='DAY') == 2400, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='KM', time='MS') == 0, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='KM', time='S') == 10, "speed_converter is not working as expected"
+    assert session5.speed_converter(6000, dist='KM', time='MIN') == 100, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='KM', time='HR') == 100, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='KM', time='DAY') == 2400, "speed_converter is not working as expected"
+
 
 def test_session5_speed_converter_output_m_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from m/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000,dist='M',time='MS') == 10, "speed_converter is not working as expected"
-    assert session5.speed_converter(3600,dist='M',time='S') == 1000, "speed_converter is not working as expected"
-    assert session5.speed_converter(60,dist='M',time='MIN') == 1000, "speed_converter is not working as expected"
-    assert session5.speed_converter(60,dist='M',time='HR') == 60000, "speed_converter is not working as expected"
-    assert session5.speed_converter(24,dist='M',time='DAY') == 576000, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='M', time='MS') == 10, "speed_converter is not working as expected"
+    assert session5.speed_converter(3600, dist='M', time='S') == 1000, "speed_converter is not working as expected"
+    assert session5.speed_converter(60, dist='M', time='MIN') == 1000, "speed_converter is not working as expected"
+    assert session5.speed_converter(60, dist='M', time='HR') == 60000, "speed_converter is not working as expected"
+    assert session5.speed_converter(24, dist='M', time='DAY') == 576000, "speed_converter is not working as expected"
+
 
 def test_session5_speed_converter_output_ft_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from ft/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000,dist='FT',time='MS') == 33, "speed_converter is not working as expected"
-    assert session5.speed_converter(36000,dist='FT',time='S') == 32808, "speed_converter is not working as expected"
-    assert session5.speed_converter(6000,dist='FT',time='MIN') == 328084, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='FT',time='HR') == 328084, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='FT',time='DAY') == 7874010, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='FT', time='MS') == 33, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='FT', time='S') == 32808, "speed_converter is not working as expected"
+    assert session5.speed_converter(6000, dist='FT', time='MIN') == 328084, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='FT', time='HR') == 328084, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='FT', time='DAY') == 7874010, "speed_converter is not working as expected"
+
 
 def test_session5_speed_converter_output_yrd_to():
     """ DON'T TOUCH THIS FUNCTION \
         Test speed_converter function for output with multiple inputs from yrd/(x), x can be ms/s/min/hr/day"""
-    assert session5.speed_converter(36000,dist='YRD',time='MS') == 11, "speed_converter is not working as expected"
-    assert session5.speed_converter(3600,dist='YRD',time='S') == 1094, "speed_converter is not working as expected"
-    assert session5.speed_converter(6000,dist='YRD',time='MIN') == 109361, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='YRD',time='HR') == 109361, "speed_converter is not working as expected"
-    assert session5.speed_converter(100,dist='YRD',time='DAY') == 2624662, "speed_converter is not working as expected"
+    assert session5.speed_converter(36000, dist='YRD', time='MS') == 11, "speed_converter is not working as expected"
+    assert session5.speed_converter(3600, dist='YRD', time='S') == 1094, "speed_converter is not working as expected"
+    assert session5.speed_converter(6000, dist='YRD',
+                                    time='MIN') == 109361, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='YRD', time='HR') == 109361, "speed_converter is not working as expected"
+    assert session5.speed_converter(100, dist='YRD',
+                                    time='DAY') == 2624662, "speed_converter is not working as expected"
