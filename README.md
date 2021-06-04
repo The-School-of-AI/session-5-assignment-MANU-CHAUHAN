@@ -50,13 +50,13 @@ __Some basic metrics for `session5.py` file__
     blank: the number of blank lines (or whitespace-only ones)
 
     RAW metric values ---->
-    LOC: 285
+    LOC: 227
     LLOC: 88
-    SLOC: 95
-    Comments: 5
-    Single comments: 5
-    Multi: 123
-    Blank: 62
+    SLOC: 81
+    Comments: 0
+    Single comments: 0
+    Multi: 110
+    Blank: 36
 
 
 -------------------------

@@ -21,14 +21,14 @@ CC score    Rank    Risk
 41+         F       very high - error-prone, unstable block
 
 results ---->
-F 185:0 temp_converter - C (12)
-F 233:0 speed_converter - B (10)
-F 113:0 squared_power_list - B (9)
-F 153:0 polygon_area - B (8)
-F 66:0 time_it - B (6)
+    F 185:0 temp_converter - C (12)
+    F 233:0 speed_converter - B (10)
+    F 113:0 squared_power_list - B (9)
+    F 153:0 polygon_area - B (8)
+    F 66:0 time_it - B (6)
 
-5 blocks (classes, functions, methods) analyzed.
-Average complexity: B (9.0)
+    5 blocks (classes, functions, methods) analyzed.
+    Average complexity: B (9.0)
 
 
 Raw metrics:
@@ -42,13 +42,14 @@ multi: the number of lines representing multi-line strings
 blank: the number of blank lines (or whitespace-only ones)
 
 RAW metric values ---->
-LOC: 285
-LLOC: 88
-SLOC: 95
-Comments: 5
-Single comments: 5
-Multi: 123
-Blank: 62
+    LOC: 227
+    LLOC: 88
+    SLOC: 81
+    Comments: 0
+    Single comments: 0
+    Multi: 110
+    Blank: 36
+
 ======================================================================
 """
 
