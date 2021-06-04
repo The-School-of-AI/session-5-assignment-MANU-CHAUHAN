@@ -1,5 +1,13 @@
 # S5
 
+![](https://pbs.twimg.com/media/Ek8HiWJVcAAuJzo.jpg)
+
+
+## Fun Python facts:
+1)  In a survey conducted by the United Kingdom in 2015, Python overtook French to be one of the most popular languages that are taught in primary schools. The results came as a shock as 6 out of 10 parents wanted their children to learn Python instead of French.
+
+2) type `import antigravity` in Python IDLE, make sure to open up a new session ! :) 
+
 ### Overview
 
 ----------
